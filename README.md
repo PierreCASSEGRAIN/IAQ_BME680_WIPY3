@@ -1,2 +1,4 @@
 # IAQ_BME680_WIPY3
 Get IAQ with a BME680 using WIPY3 (NO BSEC)
+
+IDE : Atom
