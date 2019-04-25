@@ -2,6 +2,10 @@
 import bme680
 from i2c import I2CAdapter
 import time
+import pycom
+
+
+pycom.heartbeat(False)
 
 i2c_dev = I2CAdapter(0, pins=('P9','P10'), baudrate=100000)
 sensor = bme680.BME680(i2c_device=i2c_dev)
@@ -58,6 +62,10 @@ try:
             hum = sensor.data.humidity
             hum_offset = hum - hum_baseline
 
+            temp = sensor.data.temperature
+
+            press = sensor.data.pressure
+
             # Calculate hum_score as the distance from the hum_baseline.
             if hum_offset > 0:
                 hum_score = (100 - hum_baseline - hum_offset)
@@ -82,10 +90,14 @@ try:
             # Calculate air_quality_index. From 0 (Good) to 500 (Bad).
             air_quality_index =  500 * (1- (air_quality_score/100))
 
-            print('Gas: {0:.2f} Ohms,humidity: {1:.2f} %RH,air quality: {2:.2f}'.format(
+            print('Gas: {0:.2f} Ohms,pressure: {1:.2f},humidity: {3:.2f} %RH,air quality: {4:.2f},temperature: {2:.2f} °C'.format(
                 gas,
+                press,
+                temp,
                 hum,
                 air_quality_index))
+
+
 
             time.sleep(1)
 except KeyboardInterrupt:
